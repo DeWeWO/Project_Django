@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+
+{% block title %} Contact Page {% endblock title %}
+
+	{% block content %}
+
+		{% include 'base/navbar.html' with contact_active=True %}
+
+		{% include 'base/header.html' with page_name='Contact Us' %}
+
+		{% include 'base/contact.html' %}
+
+		{% include 'base/footer.html' %}
+
+	{% endblock content %}

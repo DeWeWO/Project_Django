@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+
+{% block title %} Main Page {% endblock title %}
+
+
+	{% block content %}
+
+		{% include 'base/navbar.html' with home_active=True %}
+
+		{% include 'base/header.html' with page_name='Modern Interior Design Studio' %}
+
+		{% include 'base/productSection.html' %}
+
+		{% include 'base/chooseSection.html' %}
+
+		{% include 'base/helpSection.html' %}
+		
+		{% include 'base/popularProduct.html' %}
+		
+		{% include 'base/testimonial.html' %}
+
+		{% include 'base/recentBlog.html' %}
+
+		{% include 'base/footer.html' %}
+
+	{% endblock content %}

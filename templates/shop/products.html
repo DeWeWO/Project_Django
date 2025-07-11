@@ -1,0 +1,35 @@
+{% extends "shop/base.html" %}
+
+{% block title %} Product List {% endblock title %}
+
+{% block content %}
+    <h1 class="text-center text-primary">Product List</h1>
+    <div class="row row-cols-1 row-cols-md-3 g-4 my-5">
+        {% for product in products %}
+        <div class="col-md-4 my-3 mx-auto">
+            
+            <div class="card mx-auto" style="width: 18rem;">
+                {% if product.images.first %}
+                <img src="{{ product.images.first.image.url }}" class="card-img-top" alt="product_image">
+                {% endif %}
+                <div class="card-body">
+                    <h5>
+                        <span class="badge rounded-pill text-bg-primary">{{ product.category.title }}</span>
+                        <span class="badge rounded-pill text-bg-danger"> - {{ product.sum_discount }}</span>
+                    </h5>
+                    <h5 class="card-title">{{ product.title|truncatechars:23 }}</h5> 
+                    <p class="card-text">{{ product.description|truncatewords:4|safe }}</p>
+                    <p class="text-danger"><del>{{ product.price }} so'm</del></p>
+                    <h5 class="text-dark">{{ product.new_price }} so'm</h5>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'product_detail' product.slug %}" class="btn btn-primary">Batafsil</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+        {% include "shop/pagination.html" with page=products %}
+    </div>
+
+{% endblock content %}

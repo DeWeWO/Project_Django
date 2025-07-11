@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+
+{% block title %} About Page {% endblock title %}
+
+
+	{% block content %}
+
+		{% include 'base/navbar.html' with about_active=True %}
+
+		{% include 'base/header.html' with page_name='About Us' %}
+
+		{% include 'base/chooseSection.html' %}
+
+		{% include 'base/team.html' %}
+		
+		{% include 'base/testimonial.html' %}
+
+		{% include 'base/footer.html' %}
+
+	{% endblock content %}

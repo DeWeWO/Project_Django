@@ -1,0 +1,23 @@
+{% extends "shop/base.html" %}
+
+{% block title %} Product {{ product.title }} Detail {% endblock title %}
+
+{% block content %}
+    <h1 class="text-center text-primary">{{ product.title }} Detail</h1>
+    <div class="row my-5">
+        <div class="col-md-6">
+            <h3 class="text-center mb-3">Images</h3>
+            {% include 'shop/corusel.html' %}
+        </div>
+        <div class="col-md-6">
+            <h3 class="text-center mb-3">Information</h3>
+            <h4>{{ product.title }}</h4>
+            <p>{{ product.description|safe }}</p>
+            <h4>Price: {{ product.price }}$</h4>
+            <h5>Quantity: {{ product.quantity }}</h5>
+            <a href="{% url 'product_update' product.slug %}" class="btn btn-warning">Edit</a>
+            <a href="{% url 'product_delete' product.slug %}" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+
+{% endblock content %}
