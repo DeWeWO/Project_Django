@@ -17,7 +17,7 @@ class Registerview(View):
             login(request, user)
             return redirect("products-list")
         return render(request, "auth/register.html", {"form": form})
-
+    
 
 class LoginView(View):
     def get(self, request):
@@ -44,4 +44,5 @@ class LogutView(View):
     def get(self, request):
         logout(request=request)
         return redirect("products-list")
-        
+
+
