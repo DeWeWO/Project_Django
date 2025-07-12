@@ -64,6 +64,11 @@ class Product(BaseModel):
         self.slug = slugify(self.title)
         return super().save( *args, **kwargs)
     
+    @property
+    def last_image(self):
+        product_images = self.images.all()
+        return product_images[0].image
+    
     class Meta:
         ordering = ["-id"]
         db_table = "products"
@@ -76,3 +81,17 @@ class Discount(BaseModel):
     
     def __str__(self):
         return self.name
+
+
+class Comment(BaseModel):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="comments")
+    message = models.TextField(max_length=1000)
+    parent = models.ForeignKey("self", on_delete=models.CASCADE, related_name="childs", null=True, blank=True)
+    likes = models.PositiveIntegerField(default=0)
+    
+    def __str__(self):
+        return self.message
+    
+    class Meta:
+        db_table = "comments"

@@ -8,6 +8,7 @@ from django.db.models.functions import Round, Coalesce
 from django.core.paginator import Paginator
 from environs import Env
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 
 env = Env()
 env.read_env()
@@ -19,7 +20,9 @@ def add_product(request):
     if request.method == "POST":
         form = ProductForm(data=request.POST, files=request.FILES)
         if form.is_valid():
-            product = form.save()
+            product = form.save(commit=False)
+            product.author = request.user
+            product.save()
             images = form.cleaned_data.get("images")
             for image in images:
                 ProductImage.objects.create(product=product, image=image)
@@ -46,7 +49,7 @@ def add_product(request):
 #     return render(request, "shop/products.html", {"products": products})
 
 def product_list(request, category_slug=None):
-    products = Product.objects.all()
+    products = Product.objects.select_related("category").all()
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         products = products.filter(category=category)
@@ -68,30 +71,36 @@ def product_list(request, category_slug=None):
 
 @login_required(login_url="/auth/login/")
 def product_detail(request, product_slug):
-    product = Product.objects.get(slug=product_slug)
+    product = Product.objects.filter(slug=product_slug).select_related("author").prefetch_related("images").first()
     return render(request, "shop/product_detail.html", {"product": product})
 
 
 @login_required(login_url="/auth/login/")
 def product_update(request, product_slug):
-    product = Product.objects.get(slug=product_slug)
-    form = ProductUpdateForm(instance=product)
-    product_images = ProductImage.objects.filter(product=product)
-    if request.method == "POST":
-        form = ProductUpdateForm(instance=product, data=request.POST, files=request.FILES)
-        if form.is_valid():
-            product = form.save()
-            images = form.cleaned_data.get("images")
-            for image in images:
-                ProductImage.objects.create(product=product, image=image)
-            reverse_url = reverse("product_detail", args=(product.slug, ))
-            return redirect(reverse_url)
-    return render(request, "shop/update_product.html", {"form": form, "product_images": product_images})
+    product = Product.objects.filter(slug=product_slug).select_related("author").first()
+    if product.author == request.user:
+        form = ProductUpdateForm(instance=product)
+        product_images = ProductImage.objects.filter(product=product)
+        if request.method == "POST":
+            form = ProductUpdateForm(instance=product, data=request.POST, files=request.FILES)
+            if form.is_valid():
+                product = form.save()
+                images = form.cleaned_data.get("images")
+                for image in images:
+                    ProductImage.objects.create(product=product, image=image)
+                reverse_url = reverse("product_detail", args=(product.slug, ))
+                return redirect(reverse_url)
+        return render(request, "shop/update_product.html", {"form": form, "product_images": product_images})
+    else:
+        return HttpResponseForbidden("Siz bu mahsulotni tahrirlay olmaysiz!!")
 
 def product_delete(request, product_slug):
     product = Product.objects.get(slug=product_slug)
-    product.delete()
-    return redirect("products-list")
+    if product.author == request.user:
+        product.delete()
+        return redirect("products-list")
+    else:
+        return HttpResponseForbidden("Siz bu mahsulotni o'chira olmaysiz!!")
 
 
 

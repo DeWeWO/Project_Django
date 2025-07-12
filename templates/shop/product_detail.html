@@ -15,7 +15,7 @@
             <p>{{ product.description|safe }}</p>
             <h4>Price: {{ product.price }}$</h4>
             <h5>Quantity: {{ product.quantity }}</h5>
-            {% if request.user.is_authenticated %}
+            {% if request.user.is_authenticated and request.user == product.author %}
             <a href="{% url 'product_update' product.slug %}" class="btn btn-warning">Edit</a>
             <a href="{% url 'product_delete' product.slug %}" class="btn btn-danger">Delete</a>
             {% endif %}

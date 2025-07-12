@@ -9,8 +9,8 @@
         <div class="col-md-4 my-3 mx-auto">
             
             <div class="card mx-auto" style="width: 18rem;">
-                {% if product.images.first %}
-                <img src="{{ product.images.first.image.url }}" class="card-img-top" alt="product_image">
+                {% if product.images.all %}
+                <img src="{{ product.last_image.url }}" class="card-img-top" alt="product_image">
                 {% endif %}
                 <div class="card-body">
                     <h5>
