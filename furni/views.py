@@ -51,10 +51,11 @@ def product_list(request, category_slug=None):
     return render(request, "shop/products.html", {"products": products})
 
 
-@login_required(login_url="/auth/login/")
 def product_detail(request, product_slug):
     product = Product.objects.filter(slug=product_slug).select_related("author").prefetch_related("images").first()
-    comments = Comment.objects.filter(product=product)
+    if request.method == "POST":
+        Comment.objects.create(author=request.user, product=product, message=request.POST["comment"])
+    comments = Comment.objects.filter(product=product).annotate(like=True)
     return render(request, "shop/product_detail.html", {"product": product, "comments": comments})
 
 
@@ -77,6 +78,7 @@ def product_update(request, product_slug):
     else:
         return HttpResponseForbidden("Siz bu mahsulotni tahrirlay olmaysiz!!")
 
+@login_required(login_url="/auth/login/")
 def product_delete(request, product_slug):
     product = Product.objects.get(slug=product_slug)
     if product.author == request.user:
