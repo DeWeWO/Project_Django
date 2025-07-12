@@ -30,3 +30,6 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ["title", "description", "price", "stock_status", "quantity", "category", "discount"]
+
+class ProductUpdateForm(ProductForm):
+    images = MultipleFileField(required=False)

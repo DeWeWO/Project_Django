@@ -1,7 +1,9 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from ckeditor.fields import RichTextField
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 
 class BaseModel(models.Model):
@@ -53,6 +55,7 @@ class Product(BaseModel):
     quantity = models.PositiveIntegerField(default=0)
     category = models.ForeignKey(to=Category, on_delete=models.CASCADE, related_name="products")
     discount = models.ManyToManyField(to="furni.Discount", related_name="products", blank=True)
+    author = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="products", null=True)
     
     def __str__(self):
         return self.title

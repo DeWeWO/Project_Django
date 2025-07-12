@@ -15,12 +15,18 @@
                 <div class="card-body">
                     <h5>
                         <span class="badge rounded-pill text-bg-primary">{{ product.category.title }}</span>
-                        <span class="badge rounded-pill text-bg-danger"> - {{ product.sum_discount }}</span>
+                        {% if product.sum_discount %}
+                        <span class="badge rounded-pill text-bg-danger"> - {{ product.sum_discount }} %</span>
+                        {% endif %}
                     </h5>
                     <h5 class="card-title">{{ product.title|truncatechars:23 }}</h5> 
                     <p class="card-text">{{ product.description|truncatewords:4|safe }}</p>
-                    <p class="text-danger"><del>{{ product.price }} so'm</del></p>
-                    <h5 class="text-dark">{{ product.new_price }} so'm</h5>
+                    {% if product.new_price != product.price %}
+                        <p class="text-danger"><del>{{ product.price }} so'm</del></p>
+                        <h5 class="text-dark">{{ product.new_price }} so'm</h5>
+                    {% else %}
+                        <h5 class="text-dark">{{ product.price }} so'm</h5>
+                    {% endif %}
                     <div class="d-grid gap-2">
                         <a href="{% url 'product_detail' product.slug %}" class="btn btn-primary">Batafsil</a>
                     </div>

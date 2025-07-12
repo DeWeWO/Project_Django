@@ -13,9 +13,11 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'products-list' %}">All Products</a>
         </li>
+        {% if request.user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'add_product' %}">Add Product</a>
         </li>
+        {% endif %}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Categoryies
