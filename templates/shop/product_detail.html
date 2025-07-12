@@ -19,6 +19,7 @@
             <a href="{% url 'product_update' product.slug %}" class="btn btn-warning">Edit</a>
             <a href="{% url 'product_delete' product.slug %}" class="btn btn-danger">Delete</a>
             {% endif %}
+            {% include 'shop/comments.html' %}
         </div>
     </div>
 
