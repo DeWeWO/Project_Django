@@ -3,12 +3,13 @@ from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, ProductImage, Category, Comment
 from .forms import ProductForm, ProductUpdateForm
-from django.db.models import Avg, Max, Min, Sum, F, ExpressionWrapper, DecimalField, Value, Case, When, Q
+from django.db.models import Avg, Max, Min, Sum, F, ExpressionWrapper, DecimalField, Value, Case, When, Q, BooleanField
 from django.db.models.functions import Round, Coalesce
 from django.core.paginator import Paginator
 from environs import Env
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
+
 
 env = Env()
 env.read_env()
@@ -55,7 +56,7 @@ def product_detail(request, product_slug):
     product = Product.objects.filter(slug=product_slug).select_related("author").prefetch_related("images").first()
     if request.method == "POST":
         Comment.objects.create(author=request.user, product=product, message=request.POST["comment"])
-    comments = Comment.objects.filter(product=product).annotate(like=True)
+    comments = Comment.objects.filter(product=product).annotate(like=Value(True, output_field=BooleanField()))
     return render(request, "shop/product_detail.html", {"product": product, "comments": comments})
 
 
