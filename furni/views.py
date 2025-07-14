@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, ProductImage, Category, Comment
 from .forms import ProductForm, ProductUpdateForm
-from django.db.models import Avg, Max, Min, Sum, F, ExpressionWrapper, DecimalField, Value, Case, When, Q, BooleanField, Count
+from django.db.models import Avg, Max, Min, Sum, F, ExpressionWrapper, DecimalField, Q
 from django.db.models.functions import Round, Coalesce
 from django.core.paginator import Paginator
 from environs import Env
