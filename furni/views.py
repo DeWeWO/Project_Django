@@ -1,7 +1,7 @@
 import requests
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, ProductImage, Category, Comment, Like
+from .models import Product, ProductImage, Category, Comment
 from .forms import ProductForm, ProductUpdateForm
 from django.db.models import Avg, Max, Min, Sum, F, ExpressionWrapper, DecimalField, Value, Case, When, Q, BooleanField, Count
 from django.db.models.functions import Round, Coalesce
@@ -56,7 +56,7 @@ def product_detail(request, product_slug):
     product = Product.objects.filter(slug=product_slug).select_related("author").prefetch_related("images").first()
     if request.method == "POST":
         Comment.objects.create(author=request.user, product=product, message=request.POST["comment"])
-    comments = Comment.objects.filter(product=product).annotate(likes_count=Count("likes"))
+    comments = Comment.objects.filter(product=product)
     return render(request, "shop/product_detail.html", {"product": product, "comments": comments})
 
 

@@ -14,9 +14,9 @@
                 <p class="small mb-0 ms-2">{{ comment.author.email }}</p>
               </div>
               <div class="d-flex flex-row align-items-center">
-                <a class="small text-muted mb-0" href="{% url 'product_detail' product_slug %}?like={% if request.user == comment.author %}false{% else %}true{% endif %}&comment_id={{ comment.id }}">Like</a>
+                <a class="small text-muted mb-0">Like</a>
                 <i class="far fa-thumbs-up mx-2 fa-xs text-body" style="margin-top: -0.16rem;"></i>
-                <p class="small text-muted mb-0">{{ comment.likes_count }}</p>
+                <p class="small text-muted mb-0">1</p>
               </div>
             </div>
           </div>
