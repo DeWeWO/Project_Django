@@ -88,7 +88,7 @@ class Comment(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="comments")
     message = models.TextField(max_length=1000)
     parent = models.ForeignKey("self", on_delete=models.CASCADE, related_name="childs", null=True, blank=True)
-    likes = models.ManyToManyField("Like", related_name="likes")
+    likes = models.ManyToManyField("Like", related_name="comment_likes", null=True, blank=True)
     
     def __str__(self):
         return self.message
@@ -96,3 +96,6 @@ class Comment(BaseModel):
     class Meta:
         db_table = "comments"
 
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_likes")
+    
