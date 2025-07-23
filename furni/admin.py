@@ -30,4 +30,3 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(Discount)
 class DiscountAdmin(admin.ModelAdmin):
     list_display = ("name", "percent", "deadline")
-
